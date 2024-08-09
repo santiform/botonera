@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Planificador de Ascensor</title>
+    <style>
+        .container {
+            display: flex;
+        }
+        .input-column, .preview-column {
+            margin: 20px;
+        }
+
+        .line {
+            position: absolute;
+            height: 100%; /* Altura completa del contenedor */
+            width: 2mm; /* Ancho de las líneas punteadas */
+            display: none; /* Ocultar por defecto */
+        }
+        .line.punteada {
+            border-style: dashed;
+        }
+        .line.izquierda {
+            border-left: 2px dashed black; /* Línea punteada izquierda */
+            left: 0; /* Posición desde el borde izquierdo */
+            margin-left: 3px; /* Reducir margen desde el borde izquierdo */
+        }
+        .line.derecha {
+            border-right: 2px dashed black; /* Línea punteada derecha */
+            right: 0; /* Posición desde el borde derecho */
+            margin-right: 3px; /* Reducir margen desde el borde derecho */
+        }
+        .indicador-floors {
+            position: absolute;
+            top: 10%; /* 20% desde el borde superior */
+            left: 50%; /* Centrado horizontalmente */
+            transform: translateX(-50%); /* Ajuste para centrar la imagen */
+            display: none; /* Ocultar por defecto */
+        }
+        .preview-box {
+            border: 1px solid black;
+            background-color: lightgray;
+            position: relative;
+            width: 300px; /* Ajusta según sea necesario */
+            height: 600px; /* Ajusta según sea necesario */
+        }
+        .buttons-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center; /* Centrar horizontalmente */
+            align-items: flex-end; /* Alinear verticalmente hacia abajo */
+            position: absolute;
+            width: 6rem;
+            top: 25%; /* Ajustar el espacio desde el top para desplazar el contenedor más arriba */
+            left: 50%;
+            transform: translateX(-50%);
+            gap: 10px; /* Espacio entre botones */
+        }
+        .button {
+            width: 24px; /* Ajustar según el tamaño deseado de los botones */
+            height: 18px;
+            text-align: center;
+            background-color: #ddd;
+            border: 1px solid #ccc;
+            border-radius: 100px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="input-column">
+            <h2>Entradas</h2>
+            <label for="alto">Alto (mm):</label>
+            <input type="number" id="alto" min="0"><br><br>
+            
+            <label for="ancho">Ancho (mm):</label>
+            <input type="number" id="ancho" min="0"><br><br>
+            
+            <label for="pliegue">¿Tiene pliegue?</label>
+            <input type="checkbox" id="pliegue"><br><br>
+
+            <label for="indicador">¿Tiene indicador de piso?</label>
+            <input type="checkbox" id="indicador"><br><br>
+
+            <label for="total-paradas">Total de paradas:</label>
+            <input type="number" id="total-paradas" min="1"><br><br>
+
+            <label for="subsuelo">Cantidad de subsuelos:</label>
+            <input type="number" id="subsuelo" min="0"><br><br>
+
+            <label for="azotea">¿Tiene Azotea?</label>
+            <input type="checkbox" id="azotea"><br><br>
+        </div>
+        
+        <div class="preview-column">
+            <h2>Vista Previa</h2>
+            <div id="preview" class="preview-box">
+                <div id="buttons-container" class="buttons-container"></div>
+
+                <div id="line-izquierda" class="line izquierda"></div>
+                <div id="line-derecha" class="line derecha"></div>
+                <div id="line-pliegue" class="line punteada"></div>
+                <img id="indicador-img" class="indicador-floors" src="img/indicador-cabina.jpg" width="90px" alt="Indicador de Piso">
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
