@@ -2,7 +2,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const altoInput = document.getElementById('alto');
     const anchoInput = document.getElementById('ancho');
     const pliegueCheckbox = document.getElementById('pliegue');
-    const indicadorCheckbox = document.getElementById('indicador');
+    const indicadorSelect = document.getElementById('indicador');
     const totalParadasInput = document.getElementById('total-paradas');
     const subsueloInput = document.getElementById('subsuelo');
     const azoteaCheckbox = document.getElementById('azotea');
@@ -12,19 +12,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Definir la altura estándar y el máximo de altura en píxeles en la pantalla
     const alturaEstandar = 2150; // mm
-    const alturaMaxPantalla = 800; // px
+    const alturaMaxPantalla = 700; // px
 
     // Calcular el factor de escala para el alto
     const factorEscalaAlto = alturaMaxPantalla / alturaEstandar;
 
     // Definir el factor de escala adicional para el ancho
-    const factorEscalaAncho = 1.2; // Ajustar este valor para hacer el ancho más grande
+    const factorEscalaAncho = 1.6; // Ajustar este valor para hacer el ancho más grande
 
     function updatePreview() {
         const alto = parseFloat(altoInput.value) || 0;
         const ancho = parseFloat(anchoInput.value) || 0;
         const tienePliegue = pliegueCheckbox.checked;
-        const tieneIndicador = indicadorCheckbox.checked;
+        const indicadorValue = indicadorSelect.value;
         const totalParadas = parseInt(totalParadasInput.value) || 0;
         const subsuelos = parseInt(subsueloInput.value) || 0;
         const tieneAzotea = azoteaCheckbox.checked;
@@ -33,7 +33,7 @@ document.addEventListener('DOMContentLoaded', () => {
         let finalAncho = ancho;
 
         if (tienePliegue) {
-            finalAncho += 20; // Añade 10 mm a cada lado
+            finalAncho += 8; // Añade 4 mm a cada lado
         }
 
         // Aplicar el factor de escala para el alto y el ancho
@@ -47,8 +47,20 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('line-izquierda').style.display = tienePliegue ? 'block' : 'none';
         document.getElementById('line-derecha').style.display = tienePliegue ? 'block' : 'none';
 
-        // Mostrar/Ocultar imagen del indicador de piso
-        indicadorImg.style.display = tieneIndicador ? 'block' : 'none';
+        // Ajustar la imagen del indicador según la selección
+        if (indicadorValue === '5') {
+            indicadorImg.style.display = 'block';
+            indicadorImg.style.width = '80px'; // Tamaño para 5"
+        } else if (indicadorValue === '10') {
+            indicadorImg.style.display = 'block';
+            indicadorImg.style.width = '100px'; // Tamaño para 10"
+        } else {
+            indicadorImg.style.display = 'none';
+        }
+
+        // Actualizar etiquetas de dimensiones
+    document.getElementById('dim-alto').textContent = `${alto} mm`;
+    document.getElementById('dim-ancho').textContent = `${ancho} mm`;
 
         // Generar los botones para las paradas
         buttonsContainer.innerHTML = '';
@@ -84,11 +96,11 @@ document.addEventListener('DOMContentLoaded', () => {
         const suma = totalParadas + subsuelos;
         const esPar = suma % 2 === 0;
 
-          if (tieneAzotea && botones.length > 0) {
+        if (tieneAzotea && botones.length > 0) {
             if (esPar) {
                 botones[0] = 'AZ'; // Si es par, reemplaza el primer botón con "AZ"
-            } 
-            } 
+            }
+        }
 
         // Crear botones y añadir al contenedor
         const col1Container = document.createElement('div');
@@ -111,41 +123,39 @@ document.addEventListener('DOMContentLoaded', () => {
             col2Container.appendChild(createButtonElement(button));
         });
 
-           // Condición adicional: agregar un botón transparente si total de paradas es PAR y la suma es IMPAR
-if (totalParadas % 2 === 0 && suma % 2 !== 0) {
-    const transparentButton = createButtonElement('');
-    transparentButton.style.backgroundColor = 'transparent'; // Hacer el botón transparente
-    transparentButton.style.border = 'none'; // Quitar el borde
-    col2Container.insertBefore(transparentButton, col2Container.firstChild); // Añadir al inicio
-}
-
-
+        // Condición adicional: agregar un botón transparente si total de paradas es PAR y la suma es IMPAR
+        if (totalParadas % 2 === 0 && suma % 2 !== 0) {
+            const transparentButton = createButtonElement('');
+            transparentButton.style.backgroundColor = 'transparent'; // Hacer el fondo del botón transparente
+            transparentButton.style.border = '1px solid transparent'; // Aplicar un borde transparente
+            col2Container.insertBefore(transparentButton, col2Container.firstChild); // Añadir al inicio
+        }
 
         // Añadir las columnas al contenedor de botones
         buttonsContainer.appendChild(col1Container);
         buttonsContainer.appendChild(col2Container);
 
-
-                // Reemplazar el primer botón visible con "AZ" si se marca la casilla de azotea
+        // Reemplazar el primer botón visible con "AZ" si se marca la casilla de azotea
         if (tieneAzotea && botones.length > 0) {
             if (esPar) {
                 botones[0] = 'AZ'; // Si es par, reemplaza el primer botón con "AZ"
             } else {
-        // Si es impar, reemplaza el primer botón en la columna izquierda con "AZ"
-        const firstButtonInLeftColumn = col1Container.querySelector('.button');
-        if (firstButtonInLeftColumn) {
-            firstButtonInLeftColumn.textContent = 'AZ';
+                // Si es impar, reemplaza el primer botón en la columna izquierda con "AZ"
+                const firstButtonInLeftColumn = col1Container.querySelector('.button');
+                if (firstButtonInLeftColumn) {
+                    firstButtonInLeftColumn.textContent = 'AZ';
+                }
+            }
         }
-        } } 
 
         // Ajustar el atributo align-items basado en la suma y las nuevas condiciones
-if (totalParadas % 2 === 0 && suma % 2 !== 0) {
-    // Si total de paradas es PAR y la suma es IMPAR
-    buttonsContainer.style.alignItems = 'flex-start';
-} else {
-    // Mantener la lógica original si no se cumple la condición adicional
-    buttonsContainer.style.alignItems = esPar ? 'flex-start' : 'flex-end';
-}
+        if (totalParadas % 2 === 0 && suma % 2 !== 0) {
+            // Si total de paradas es PAR y la suma es IMPAR
+            buttonsContainer.style.alignItems = 'flex-start';
+        } else {
+            // Mantener la lógica original si no se cumple la condición adicional
+            buttonsContainer.style.alignItems = esPar ? 'flex-start' : 'flex-end';
+        }
     }
 
     function createButtonElement(text) {
@@ -158,7 +168,7 @@ if (totalParadas % 2 === 0 && suma % 2 !== 0) {
     altoInput.addEventListener('input', updatePreview);
     anchoInput.addEventListener('input', updatePreview);
     pliegueCheckbox.addEventListener('change', updatePreview);
-    indicadorCheckbox.addEventListener('change', updatePreview);
+    indicadorSelect.addEventListener('change', updatePreview);
     totalParadasInput.addEventListener('input', updatePreview);
     subsueloInput.addEventListener('input', updatePreview);
     azoteaCheckbox.addEventListener('change', updatePreview);

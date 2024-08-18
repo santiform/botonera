@@ -52,9 +52,9 @@
             align-items: flex-end; /* Alinear verticalmente hacia abajo */
             position: absolute;
             width: 6rem;
-            top: 25%; /* Ajustar el espacio desde el top para desplazar el contenedor más arriba */
+            top: 50%; /* Ajustar el espacio desde el top para desplazar el contenedor más arriba */
             left: 50%;
-            transform: translateX(-50%);
+            transform: translate(-50%, -50%);
             gap: 10px; /* Espacio entre botones */
         }
         .button {
@@ -64,7 +64,34 @@
             background-color: #ddd;
             border: 1px solid #ccc;
             border-radius: 100px;
+            font-size: 14px;
+            margin-bottom: 4px;
+            line-height: 18px; /* Igualar el line-height a la altura del botón */
         }
+        .dimensiones {
+    position: absolute;
+    font-size: 12px;
+    color: black;
+    background-color: transparent;
+    padding: 0;
+    border: none;
+    border-radius: 3px;
+    text-align: center;
+}
+
+#dim-alto {
+    top: 50%; /* Centro verticalmente */
+    right: -53px; /* Fuera del cuadrilátero, ajusta según sea necesario */
+    transform: translateY(-50%); /* Centra verticalmente */
+}
+
+#dim-ancho {
+    bottom: -23px; /* Fuera del cuadrilátero, ajusta según sea necesario */
+    left: 50%; /* Centro horizontalmente */
+    transform: translateX(-50%); /* Centra horizontalmente */
+    white-space: nowrap;
+}
+
     </style>
 </head>
 <body>
@@ -80,8 +107,14 @@
             <label for="pliegue">¿Tiene pliegue?</label>
             <input type="checkbox" id="pliegue"><br><br>
 
-            <label for="indicador">¿Tiene indicador de piso?</label>
-            <input type="checkbox" id="indicador"><br><br>
+            <label for="indicador">Indicador de piso:</label>
+            <select id="indicador">
+                <option value="" disabled selected>Selecciona una opción</option>
+                <option value="5">5"</option>
+                <option value="10">10"</option>
+                <option value="none">Sin indicador</option>
+            </select><br><br>
+
 
             <label for="total-paradas">Total de paradas:</label>
             <input type="number" id="total-paradas" min="1"><br><br>
@@ -101,7 +134,11 @@
                 <div id="line-izquierda" class="line izquierda"></div>
                 <div id="line-derecha" class="line derecha"></div>
                 <div id="line-pliegue" class="line punteada"></div>
-                <img id="indicador-img" class="indicador-floors" src="img/indicador-cabina.jpg" width="90px" alt="Indicador de Piso">
+                <img id="indicador-img" class="indicador-floors" src="img/indicador-cabina.jpg" width="80px" alt="Indicador de Piso">
+
+                <!-- Nuevos elementos para mostrar dimensiones -->
+                <div id="dim-alto" class="dimensiones"></div>
+                <div id="dim-ancho" class="dimensiones"></div>
             </div>
         </div>
     </div>
