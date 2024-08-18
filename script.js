@@ -80,10 +80,15 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
 
-        // Reemplazar el primer botón visible con "AZ" si se marca la casilla de azotea
-        if (tieneAzotea && botones.length > 0) {
-            botones[0] = 'AZ'; // Reemplaza el primer botón (el más alto) con "AZ"
-        }
+        // Calcular la suma y determinar si es par o impar
+        const suma = totalParadas + subsuelos;
+        const esPar = suma % 2 === 0;
+
+          if (tieneAzotea && botones.length > 0) {
+            if (esPar) {
+                botones[0] = 'AZ'; // Si es par, reemplaza el primer botón con "AZ"
+            } 
+            } 
 
         // Crear botones y añadir al contenedor
         const col1Container = document.createElement('div');
@@ -93,41 +98,61 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Añadir botones de pisos (pares e impares)
         botones.forEach(button => {
-            const btn = document.createElement('div');
-            btn.className = 'button';
-            btn.textContent = button;
+            const btn = createButtonElement(button);
             (parseInt(button) % 2 === 0 || button === '0') ? col1Container.appendChild(btn) : col2Container.appendChild(btn);
         });
 
         // Añadir botones de subsuelo (pares e impares)
         subsuelosPares.forEach(button => {
-            const btn = document.createElement('div');
-            btn.className = 'button';
-            btn.textContent = button;
-            col1Container.appendChild(btn);
+            col1Container.appendChild(createButtonElement(button));
         });
 
         subsuelosImpares.forEach(button => {
-            const btn = document.createElement('div');
-            btn.className = 'button';
-            btn.textContent = button;
-            col2Container.appendChild(btn);
+            col2Container.appendChild(createButtonElement(button));
         });
+
+           // Condición adicional: agregar un botón transparente si total de paradas es PAR y la suma es IMPAR
+if (totalParadas % 2 === 0 && suma % 2 !== 0) {
+    const transparentButton = createButtonElement('');
+    transparentButton.style.backgroundColor = 'transparent'; // Hacer el botón transparente
+    transparentButton.style.border = 'none'; // Quitar el borde
+    col2Container.insertBefore(transparentButton, col2Container.firstChild); // Añadir al inicio
+}
+
+
 
         // Añadir las columnas al contenedor de botones
         buttonsContainer.appendChild(col1Container);
         buttonsContainer.appendChild(col2Container);
 
-        // Calcular la suma y determinar si es par o impar
-        const suma = totalParadas + subsuelos;
-        const esPar = suma % 2 === 0;
 
-        // Ajustar el atributo align-items basado en la suma
-        if (esPar) {
-            buttonsContainer.style.alignItems = 'flex-start'; // Si la suma es par
-        } else {
-            buttonsContainer.style.alignItems = 'flex-end'; // Si la suma es impar
+                // Reemplazar el primer botón visible con "AZ" si se marca la casilla de azotea
+        if (tieneAzotea && botones.length > 0) {
+            if (esPar) {
+                botones[0] = 'AZ'; // Si es par, reemplaza el primer botón con "AZ"
+            } else {
+        // Si es impar, reemplaza el primer botón en la columna izquierda con "AZ"
+        const firstButtonInLeftColumn = col1Container.querySelector('.button');
+        if (firstButtonInLeftColumn) {
+            firstButtonInLeftColumn.textContent = 'AZ';
         }
+        } } 
+
+        // Ajustar el atributo align-items basado en la suma y las nuevas condiciones
+if (totalParadas % 2 === 0 && suma % 2 !== 0) {
+    // Si total de paradas es PAR y la suma es IMPAR
+    buttonsContainer.style.alignItems = 'flex-start';
+} else {
+    // Mantener la lógica original si no se cumple la condición adicional
+    buttonsContainer.style.alignItems = esPar ? 'flex-start' : 'flex-end';
+}
+    }
+
+    function createButtonElement(text) {
+        const btn = document.createElement('div');
+        btn.className = 'button';
+        btn.textContent = text;
+        return btn;
     }
 
     altoInput.addEventListener('input', updatePreview);
