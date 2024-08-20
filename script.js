@@ -12,13 +12,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Definir la altura estándar y el máximo de altura en píxeles en la pantalla
     const alturaEstandar = 2150; // mm
-    const alturaMaxPantalla = 700; // px
+    const alturaMaxPantalla = 860; // px
 
     // Calcular el factor de escala para el alto
     const factorEscalaAlto = alturaMaxPantalla / alturaEstandar;
 
     // Definir el factor de escala adicional para el ancho
-    const factorEscalaAncho = 1.6; // Ajustar este valor para hacer el ancho más grande
+    const factorEscalaAncho = 1.4; // Ajustar este valor para hacer el ancho más grande
 
     function updatePreview() {
         const alto = parseFloat(altoInput.value) || 0;
@@ -50,10 +50,10 @@ document.addEventListener('DOMContentLoaded', () => {
         // Ajustar la imagen del indicador según la selección
         if (indicadorValue === '5') {
             indicadorImg.style.display = 'block';
-            indicadorImg.style.width = '80px'; // Tamaño para 5"
+            indicadorImg.style.width = '60px'; // Tamaño para 5"
         } else if (indicadorValue === '10') {
             indicadorImg.style.display = 'block';
-            indicadorImg.style.width = '100px'; // Tamaño para 10"
+            indicadorImg.style.width = '80px'; // Tamaño para 10"
         } else {
             indicadorImg.style.display = 'none';
         }
